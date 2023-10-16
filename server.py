@@ -7,7 +7,7 @@ from datetime import datetime
 from flask_cors import CORS 
 
 app = Flask(__name__, template_folder="build/", static_folder="build/static")
-sqlite_path = "/home/ankit/Downloads/expense.db"
+sqlite_path = "expense.db"
 CORS(
     app,
     origins=["*"],
