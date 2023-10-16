@@ -41,7 +41,7 @@ def add_expense():
         purchased_by = request.form['purchased_by']
         purchase_date = request.form['purchase_date']
         print(purchase_date)
-        purchase_date = " ".join(purchase_date.split(" ")[1:4])
+        purchase_date = " ".join(purchase_date.split(" ")[:4])
         purchase_date = datetime.strptime(purchase_date, '%a %b %d %Y').strftime('%b %d %Y')
 
         expense = Expense(item_name=item_name, amount=amount, purchased_by=purchased_by, purchase_date=purchase_date)
