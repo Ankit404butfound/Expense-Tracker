@@ -173,6 +173,7 @@ def get_expenditure_by_person():
 def listen_to_push_event():
     print("push event received")
     os.system("git pull") #pull changes from github
+    print("changes pulled")
     return "success"
 
 
