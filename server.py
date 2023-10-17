@@ -115,5 +115,64 @@ def delete_all():
         db.session.commit()
     return "success"
 
+
+
+@app.route("/get_expenditure_by_person")
+def get_expenditure_by_person():
+    current_month = datetime.now().strftime('%b')
+    #get sum of all expenses by Ankit in current month
+    expenses_by_Ankit = Expense.query.filter(Expense.purchased_by.contains("Ankit"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
+    expenses_by_Ayush = Expense.query.filter(Expense.purchased_by.contains("Ayush"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
+    expenses_by_Dhruv = Expense.query.filter(Expense.purchased_by.contains("Dhruv"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
+    expenses_by_Shubhendra = Expense.query.filter(Expense.purchased_by.contains("Shubhendra"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
+
+    print(expenses_by_Ankit, expenses_by_Ayush, expenses_by_Dhruv, expenses_by_Shubhendra)
+    if expenses_by_Ankit is None:
+        expenses_by_Ankit = 0
+
+    if expenses_by_Ayush is None:
+        expenses_by_Ayush = 0
+
+    if expenses_by_Dhruv is None:
+        expenses_by_Dhruv = 0
+
+    if expenses_by_Shubhendra is None:
+        expenses_by_Shubhendra = 0
+
+    total_expenses = expenses_by_Ankit + expenses_by_Ayush + expenses_by_Dhruv + expenses_by_Shubhendra
+    expenses_per_person = total_expenses / 4
+
+    Ankit_ows = expenses_per_person - expenses_by_Ankit
+    Ayush_ows = expenses_per_person - expenses_by_Ayush
+    Dhruv_ows = expenses_per_person - expenses_by_Dhruv
+    Shubhendra_ows = expenses_per_person - expenses_by_Shubhendra
+
+    json = {
+    }
+    
+    expenses_owed = {
+        "Ankit": Ankit_ows,
+        "Ayush": Ayush_ows,
+        "Dhruv": Dhruv_ows,
+        "Shubhendra": Shubhendra_ows
+    }
+
+    while any(expenses_owed.values()):
+        min_key, min_value = min(expenses_owed.items(), key=lambda item: item[1])
+        max_key, max_value = max(expenses_owed.items(), key=lambda item: item[1])
+
+        json[max_key+" to "+min_key] = abs(min_value)
+        expenses_owed[max_key] = max_value + min_value
+        expenses_owed[min_key] = 0
+
+    return json
+
+
+@app.route("/listen_to_push_event", methods=["POST"])
+def listen_to_push_event():
+    print("push event received")
+    return "success"
+
+
 if __name__ == '__main__':
     app.run("0.0.0.0", debug=True, port=5002)
