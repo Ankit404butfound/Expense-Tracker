@@ -155,6 +155,20 @@ def calculate_expenses_owed():
     Shubhendra_ows = expenses_per_person - expenses_by_Shubhendra
 
     json = {
+        "expenses": {
+            "Ankit": expenses_by_Ankit,
+            "Ayush": expenses_by_Ayush,
+            "Dhruv": expenses_by_Dhruv,
+            "Shubhendra": expenses_by_Shubhendra
+        },
+        "average_expenses_per_person": expenses_per_person,
+        "expenses_owed": {
+            "Ankit": Ankit_ows,
+            "Ayush": Ayush_ows,
+            "Dhruv": Dhruv_ows,
+            "Shubhendra": Shubhendra_ows
+        },
+        "to_pay": {}
     }
     
     expenses_owed = {
@@ -168,7 +182,7 @@ def calculate_expenses_owed():
         min_key, min_value = min(expenses_owed.items(), key=lambda item: item[1])
         max_key, max_value = max(expenses_owed.items(), key=lambda item: item[1])
 
-        json[max_key+" to "+min_key] = abs(min_value)
+        json["to_pay"][max_key+" to "+min_key] = abs(min_value)
         expenses_owed[max_key] = max_value + min_value
         expenses_owed[min_key] = 0
 
