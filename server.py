@@ -1,9 +1,10 @@
 # a FLASK APP FOR EXPENSE TRACKING USING SQLITE DATABASE
 import os
+import atexit
 
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy #pip install flask_sqlalchemy
-from sqlalchemy import create_engine #pip install sqlalchemy
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_cors import CORS 
 
@@ -28,6 +29,11 @@ class Expense(db.Model):
         return '<Expense %r>' % self.id
     
 
+def create_backup_of_db():
+    data = open(sqlite_path, 'rb').read()
+    with open("../expense_backup.db", 'wb') as f:
+        f.write(data)
+    print("backup created")
 
     
 @app.route('/')
@@ -183,4 +189,8 @@ def ping():
 
 
 if __name__ == '__main__':
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(create_backup_of_db, 'interval', minutes=1)
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
     app.run("0.0.0.0", debug=True, port=5002)
