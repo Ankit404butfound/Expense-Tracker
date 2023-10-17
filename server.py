@@ -30,7 +30,7 @@ class Expense(db.Model):
     
 
 def create_backup_of_db():
-    data = open(sqlite_path, 'rb').read()
+    data = open("instance/expense.db", 'rb').read()
     with open("../expense_backup.db", 'wb') as f:
         f.write(data)
     print("backup created")
