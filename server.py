@@ -177,5 +177,10 @@ def listen_to_push_event():
     return "success"
 
 
+@app.route("/ping")
+def ping():
+    return "pong"
+
+
 if __name__ == '__main__':
     app.run("0.0.0.0", debug=True, port=5002)
