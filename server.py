@@ -118,8 +118,8 @@ def delete_all():
 
 
 
-@app.route("/get_expenditure_by_person")
-def get_expenditure_by_person():
+@app.route("/calculate_expenses_owed")
+def calculate_expenses_owed():
     current_month = datetime.now().strftime('%b')
     #get sum of all expenses by Ankit in current month
     expenses_by_Ankit = Expense.query.filter(Expense.purchased_by.contains("Ankit"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
