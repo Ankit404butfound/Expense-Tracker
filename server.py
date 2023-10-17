@@ -172,7 +172,7 @@ def get_expenditure_by_person():
 @app.route("/listen_to_push_event", methods=["POST"])
 def listen_to_push_event():
     print("push event received")
-    os.system
+    os.system("git pull")
     return "success"
 
 
