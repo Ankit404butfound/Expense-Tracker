@@ -1,4 +1,5 @@
 # a FLASK APP FOR EXPENSE TRACKING USING SQLITE DATABASE
+import os
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy #pip install flask_sqlalchemy
