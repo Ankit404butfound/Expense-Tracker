@@ -127,11 +127,13 @@ def delete_all():
 @app.route("/calculate_expenses_owed")
 def calculate_expenses_owed():
     current_month = datetime.now().strftime('%b')
+    month_number = request.args.get("month")
+    month = datetime.strptime(month_number, "%m").strftime("%b") if month_number else current_month
     #get sum of all expenses by Ankit in current month
-    expenses_by_Ankit = Expense.query.filter(Expense.purchased_by.contains("Ankit"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
-    expenses_by_Ayush = Expense.query.filter(Expense.purchased_by.contains("Ayush"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
-    expenses_by_Dhruv = Expense.query.filter(Expense.purchased_by.contains("Dhruv"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
-    expenses_by_Shubhendra = Expense.query.filter(Expense.purchased_by.contains("Shubhendra"), Expense.purchase_date.contains(current_month)).with_entities(db.func.sum(Expense.amount)).scalar()
+    expenses_by_Ankit = Expense.query.filter(Expense.purchased_by.contains("Ankit"), Expense.purchase_date.contains(month)).with_entities(db.func.sum(Expense.amount)).scalar()
+    expenses_by_Ayush = Expense.query.filter(Expense.purchased_by.contains("Ayush"), Expense.purchase_date.contains(month)).with_entities(db.func.sum(Expense.amount)).scalar()
+    expenses_by_Dhruv = Expense.query.filter(Expense.purchased_by.contains("Dhruv"), Expense.purchase_date.contains(month)).with_entities(db.func.sum(Expense.amount)).scalar()
+    expenses_by_Shubhendra = Expense.query.filter(Expense.purchased_by.contains("Shubhendra"), Expense.purchase_date.contains(month)).with_entities(db.func.sum(Expense.amount)).scalar()
 
     print(expenses_by_Ankit, expenses_by_Ayush, expenses_by_Dhruv, expenses_by_Shubhendra)
     if expenses_by_Ankit is None:
