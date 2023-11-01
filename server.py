@@ -97,6 +97,9 @@ def get_expenses():
 
     # Get all expenses of the current month
     current_month = datetime.now().strftime('%b')
+    month = request.args.get("month")
+    if month:
+        current_month = datetime.strptime(month, "%m").strftime("%b")
     expenses = Expense.query.filter(Expense.purchase_date.contains(current_month)).order_by(Expense.purchase_date)
     json = {
         "expenses": []
